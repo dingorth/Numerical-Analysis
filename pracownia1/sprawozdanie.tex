@@ -49,7 +49,7 @@ Przed przystąpieniem do jakichkolwiek obliczeń sprawdzam uwarunkowanie zadania
 \indent Maksimum globalne wskaźnika uwarunkowania wynosi 1 zatem można powiedzieć, że zadanie jest dobrze uwarunkowane.
 
 \section{Szereg Taylora}
-Pierwszy sposób obliczania wartości funkcji $\arctan(x)$ opiera się o rozwinięcie w szereg Taylora
+Pierwszy sposób obliczania wartości funkcji $\arctan(x)$ opiera się o rozwinięcie jej w szereg Taylora
 
 \begin{equation}
 \arctan(x)=x-{\frac {x^{3}}{3}}+{\frac {x^{5}}{5}}-{\frac {x^{7}}{7}}+\cdots =\sum _{n=0}^{\infty }{\frac {(-1)^{n}x^{2n+1}}{2n+1}}\,;\qquad |x|\leq 1\qquad 
@@ -58,20 +58,23 @@ Pierwszy sposób obliczania wartości funkcji $\arctan(x)$ opiera się o rozwini
 Szereg ten jest zbieżny tylko dla $x$ z przedziału $[-1,1]$.
 Tabelka z iteracjami i błędami.
 
+\subsection{Szacowanie reszty}
+O szacowanie reszty w szeregu Taylora.
+
 \section{Szereg Eulera}
 
-Funkcję $\arctan$ rozwinąć można w inny szereg - szereg Eulera:
+Funkcję $\arctan$ wyrazić można również za pomocą innego szeregu - szeregu Eulera:
 
 \begin{equation}
-\arctan z=\sum _{n=0}^{\infty }{\frac {2^{2n}(n!)^{2}}{(2n+1)!}}\;{\frac {z^{2n+1}}{(1+z^{2})^{n+1}}}
+\arctan (x)=\sum _{n=0}^{\infty }{\frac {2^{2n}(n!)^{2}}{(2n+1)!}}\;{\frac {x^{2n+1}}{(1+x^{2})^{n+1}}}
 \end{equation}
 
 Szereg ten zbiega nieznacznie szybciej niż metoda poprzednia.
-Jest zbieżny na całej prostej.
+Jest zbieżny na całej prostej. Zdaje się, że dla x bliskich 0 jest gorszy od Taylora.
 Tabelka z iteracjami i błędami.
 
 \section{Nieskończony ułamek łańcuchowy}
-Funkcja $\arctan$ może zostać zapisana również za pomocą nieskończonego ułamka łańcuchowego:
+Funkcja $\arctan$ może zostać zapisana również za pomocą nieskończonego ułamka łańcuchowego \cite{deutsch}:
 
 \begin{equation}
 \arctan(x)={\frac {x}{1+{\cfrac {(1x)^{2}}{3+{\cfrac {(2x)^{2}}{5+{\cfrac {(3x)^{2}}{7+{\cfrac {(4x)^{2}}{9+\ddots }}}}}}}}}}
@@ -97,7 +100,7 @@ Doświadczenia numeryczne pokazują jednak, że opłaca się zmniejszyć argumen
 W celu obliczenia wartośći funkcji $\textrm{arccot}(x)$ skorystam ze wzoru:
 
 \begin{equation}
-\arctan \left({\frac {1}{x}}\right)=\operatorname {arccot}(x)\,,{\text{ if }}x>0
+\arctan \left({\frac {1}{x}}\right)=\operatorname {arccot}(x)
 \end{equation}
 
 Do obliczenia $\arctan(\frac{1}{x})$ użyję opisanych wcześniej metod.
@@ -136,6 +139,11 @@ Bardzo opłaca się zbijanie argmentu do poziomu 0.1
 	
 	\bibitem{fraction} \url{http://mathworld.wolfram.com/e.html}
 	(ostatni dostęp do strony \today).
+	
+	\bibitem{wolfram}
+	Weisstein, Eric W. "Inverse Tangent." From MathWorld--A Wolfram Web Resource.\url{http://mathworld.wolfram.com/InverseTangent.html}  
+	
+	\bibitem{deutsch} Oskar Perron - "Die Lehre von den Kettenbrüchen"
 	
 \end{thebibliography}
 
