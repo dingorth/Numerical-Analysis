@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+
+\usepackage{bbm}
+\usepackage{graphicx}    
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{comment}
+\usepackage[section]{placeins}
+\newtheorem{defi}{Definicja}
+\newtheorem{twr}{Twierdzenie}
+
+
+\author{Jan Mazur 281141}
+\date{Wrocław, \today}
+\title{\textbf{Naturalne funkcje sklejane III stopnia} \\ Sprawozdanie do zadania P.2.9	}
+
+\begin{document}
+\maketitle
+
+\section{Wstęp}
+Interpolacja to ...
+
+Może ustalmy normę dla naszych obliczeń. To norma z zadania.
+
+\section{Interpolacja wielomianowa}
+Zinterpolujmy funkcję w n+1 punktach wielomianem n-tego stopnia.
+Zastosujemy algorytm znajdjący wielomian interpolacyjny w postaci Newtona.
+
+Funkcja Runge'go
+Całkiem fajnie działa. Psuje się na końcach przedziałów. Czasem im więcej punktów tym większy błąd - większa norma. To bardzo źle.
+
+\section{Funkcje sklejane}
+
+Cała ta teoria. Stopnie funkcji. Okresowa, naturalna.
+Zajmiemy się naturalną.
+
+\section{Interpolacja naturalną funkcją sklejaną III stopnia}
+Macierzowy układ równań. Trójprzekątniowa macierz z dominującą przekątną.
+Momenty - drugie pochodne.
+Algorytm rozwiązujący w czasie liniowym.
+
+\section{Testy}
+Wykresiki i liczenie błędów.
+
+Wybór punktów interpolacyjnych.
+	
+	
+\section{Wnioski}
+Jeśli zwykła interpolacja bardzo odstaje w niektórych miejscach to lepiej interpolować splinem.
+
+Czy punkty równoodległe?
+
+
+\begin{thebibliography}{9}
+	\itemsep2pt
+			
+	\bibitem{kincaid} David Kincaid, Ward Cheney - "Analiza Numeryczna"
+	
+	\bibitem{prezentacja} \url{https://www.math.ntnu.no/emner/TMA4215/2008h/cubicsplines.pdf}
+	
+	\bibitem{wolfram_mathworld} Weisstein, Eric W. "Cubic Spline." From MathWorld--A Wolfram Web Resource. \url{http://mathworld.wolfram.com/CubicSpline.html}
+	
+	\bibitem{wiki} \url{https://en.wikipedia.org/wiki/Spline_interpolation}
+	 
+\end{thebibliography}
+
+\end{document}
