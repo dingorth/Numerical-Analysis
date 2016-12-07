@@ -72,8 +72,8 @@ function splineInterp(f,args)
 end
 
 # Funkcja błędu z treści zadania.
-function splineError(f,args,N)
-    s = splineInterp(f,args)
+function interpError(f,args,interp,N)
+    s = interp(f,args)
     a = args[1]
     b = args[end]
     
@@ -160,3 +160,57 @@ function plotNewton(f,args,step)
     
     plot([func, newt], layout)
 end
+
+# Błąd interpolacji z zadania, dla gotowej funkcji interpolacyjnej.
+function interpErrorFunction(f,args,interpFunction,N)
+    a = args[1]
+    b = args[end]
+    
+    step = (b - a) / (N - 1)
+    
+    range = a:step:b
+    
+    max = 0
+    for i in range
+        diff = abs(f(i) - interpFunction(i))
+        if( diff > max )
+            max = diff
+        end
+    end
+    
+    return max 
+end
+
+# Kreśli splinea i newtona oraz funkcje interpolowaną.
+function plotNewtonSpline(f,args,step,error = false, N = 2 )
+    s = splineInterp(f,args)
+    newton = newtonInterp(f,args)
+    
+    plot_args = args[1]:step:args[end]
+    
+    n = length(plot_args)
+    
+    func_values = Array{Any}(n)
+    spline_values = Array{Any}(n)
+    newton_values = Array{Any}(n)
+    
+    func_values = map(f,plot_args)
+    spline_values = map(s,plot_args)
+    newton_values = map(newton,plot_args)
+    
+    func = scatter(;x=plot_args, y=func_values, mode="lines", name = "function")
+    spli = scatter(;x=plot_args, y=spline_values, mode="lines", name = "spline")
+    newt = scatter(;x=plot_args, y=newton_values, mode="lines", name = "newton")
+
+    layout = Layout(;title="Natural cubic spline, and polynomial interpolation",xaxis=attr(title="args"),yaxis=attr(title="values"))
+    
+
+    if error == true
+        @printf("Błąd wielomianu interpolacyjnego: %.5e\n", interpErrorFunction(f,args,newton,N) )
+        @printf("Błąd funkcji sklejanej: %.5e\n", interpErrorFunction(f,args,s,N) )    
+    end
+
+    plot([func, spli, newt],layout)
+end
+
+        
