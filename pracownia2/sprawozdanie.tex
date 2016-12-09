@@ -24,9 +24,18 @@
 \maketitle
 
 \section{Wstęp}
-Interpolacja to ...
+"Interpolacja to metoda numeryczna polegająca na wyznaczaniu w danym przedziale tzw. funkcji interpolacyjnej, która przyjmuje w nim z góry zadane wartości, w ustalonych punktach nazywanych węzłami." \cite{wikipedia_pl}
+Najczęściej stosowana jest interpolacja wielomianami, ponieważ  mają one sporo przydatnych własności, co imlikuje istnienie wielu narzędzi matematycznych do ich analizy. Jednakże nie zawsze jest to dobra metoda.
+Wtedy zastosować można inny sposób interpolacji - interpolację funkcjami sklejanymi.
+Przedstawię obię metody, skupiając się jednak na interpolacjami funkcjami sklejanymi. Porównam ich błędy w stosunku do funkcji interpolowanej.
 
-Może ustalmy normę dla naszych obliczeń. To norma z zadania.
+Zanim przystąpimy do obliczeń ustalmy funkcję błędu:
+
+\begin{defi}
+	$E_N^{(n)} := \max_{x \in D_N}|f(x)-s(x)))|$ \\
+	\\
+	Gdzie s jest funkcją interpolacyjną w n+1 parami różnych węzłach z przedziału $[a,b]$, f funkcją interpolowaną a $D_N$ zbiorem parami różnych równoodległych punktów z przedziału $[a,b]$.
+\end{defi}
 
 \section{Interpolacja wielomianowa}
 Zinterpolujmy funkcję w n+1 punktach wielomianem n-tego stopnia.

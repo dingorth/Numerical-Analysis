@@ -1,3 +1,8 @@
+# Jan Mazur 
+# 281141
+# Zadanie P2.9
+
+
 # Funkcja wylicza ilorazy różnicowe.
 function difference_quotients(f,args)
     values = map(f,args)
@@ -72,8 +77,8 @@ function splineInterp(f,args)
 end
 
 # Funkcja błędu z treści zadania.
-function interpError(f,args,interp,N)
-    s = interp(f,args)
+function interpError(f,args,method,N)
+    s = method(f,args)
     a = args[1]
     b = args[end]
     
@@ -84,6 +89,26 @@ function interpError(f,args,interp,N)
     max = 0
     for i in range
         diff = abs(f(i) - s(i))
+        if( diff > max )
+            max = diff
+        end
+    end
+    
+    return max 
+end
+
+# Błąd interpolacji z zadania, dla gotowej funkcji interpolacyjnej.
+function interpErrorFunction(f,args,interpFunction,N)
+    a = args[1]
+    b = args[end]
+    
+    step = (b - a) / (N - 1)
+    
+    range = a:step:b
+    
+    max = 0
+    for i in range
+        diff = abs(f(i) - interpFunction(i))
         if( diff > max )
             max = diff
         end
@@ -116,7 +141,7 @@ end
 # stopia interpolującej funkcję f w punktach args.
 # Argument step opisuje odległość pomiędzy punktami próbkowania obu
 # funkcji.
-function plotSplineAndFunction(f,args,step)
+function plotSplineAndFunction(f,args,step,error = false, NArray = [2])
     s = splineInterp(f,args)
     
     plot_args = args[1]:step:args[end]
@@ -134,6 +159,11 @@ function plotSplineAndFunction(f,args,step)
     
     layout = Layout(;title="Natural cubic spline interpolation",xaxis=attr(title="args"),yaxis=attr(title="values"))
     
+    if error == true
+        @printf("Błądy interpolacji funkcją sklejaną:\n")
+        testErrorFunction(f,args,s,NArray)
+    end
+
     plot([func, spli],layout)
 end
 
@@ -141,7 +171,7 @@ end
 # punktach args.
 # Argument step opisuje odległość pomiędzy punktami próbkowania obu
 # funkcji.
-function plotNewton(f,args,step)
+function plotNewton(f,args,step,error = false, NArray = [2])
     n = length(args)
     a=args[1]
     b=args[n]
@@ -158,31 +188,18 @@ function plotNewton(f,args,step)
     
     layout = Layout(;title="Newton interpolation",xaxis=attr(title="args"),yaxis=attr(title="values"))
     
+    if error == true
+        @printf("Błądy interpolacji wielomianem:\n")
+        testErrorFunction(f,args,newton,NArray)
+    end
+
     plot([func, newt], layout)
 end
 
-# Błąd interpolacji z zadania, dla gotowej funkcji interpolacyjnej.
-function interpErrorFunction(f,args,interpFunction,N)
-    a = args[1]
-    b = args[end]
-    
-    step = (b - a) / (N - 1)
-    
-    range = a:step:b
-    
-    max = 0
-    for i in range
-        diff = abs(f(i) - interpFunction(i))
-        if( diff > max )
-            max = diff
-        end
-    end
-    
-    return max 
-end
-
 # Kreśli splinea i newtona oraz funkcje interpolowaną.
-function plotNewtonSpline(f,args,step,error = false, N = 2 )
+# Opcjonalnie wypisuje błąd zdefiniowany jak w treści
+# dla obu interpolacji.
+function plotNewtonSpline(f,args,step,error = false, NArray = [2] )
     s = splineInterp(f,args)
     newton = newtonInterp(f,args)
     
@@ -206,11 +223,37 @@ function plotNewtonSpline(f,args,step,error = false, N = 2 )
     
 
     if error == true
-        @printf("Błąd wielomianu interpolacyjnego: %.5e\n", interpErrorFunction(f,args,newton,N) )
-        @printf("Błąd funkcji sklejanej: %.5e\n", interpErrorFunction(f,args,s,N) )    
+        @printf("Błądy interpolacji wielomianem:\n")
+        testErrorFunction(f,args,newton,NArray)
+        @printf("Błądy interpolacji funkcją sklejaną:\n")
+        testErrorFunction(f,args,s,NArray)
     end
 
     plot([func, spli, newt],layout)
 end
 
-        
+function testError(f,args,interpMethod,NArray)
+    show_args = collect(args)
+
+    interpFunction = interpMethod(f,args)
+    n = length(args) - 1
+    @printf("Interpolacja w N równoodległych węzłach:\n");
+    @show show_args
+    for N in NArray
+        error = interpErrorFunction(f,args,interpFunction,N)
+        @printf("Błąd przy n = %d, N = %d:\t%.5e\n",n,N,error)
+    end
+end
+
+function testErrorFunction(f,args,interpFunction,NArray)
+    show_args = collect(args)
+
+    n = length(args) - 1
+    @printf("Interpolacja w N równoodległych węzłach:\n");
+    @show show_args
+    for N in NArray
+        error = interpErrorFunction(f,args,interpFunction,N)
+        @printf("Błąd przy n = %d, N = %d:\t%.5e\n",n,N,error)
+    end 
+    @printf("\n")
+end
