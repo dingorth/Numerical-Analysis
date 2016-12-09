@@ -154,13 +154,13 @@ function plotSplineAndFunction(f,args,step,error = false, NArray = [2])
     func_values = map(f,plot_args)
     spline_values = map(s,plot_args)
     
-    func = scatter(;x=plot_args, y=func_values, mode="lines", name = "function")
-    spli = scatter(;x=plot_args, y=spline_values, mode="lines", name = "spline")
+    func = scatter(;x=plot_args, y=func_values, mode="lines", name = "funkcja interpolowana")
+    spli = scatter(;x=plot_args, y=spline_values, mode="lines", name = "funkcja sklejana")
     
-    layout = Layout(;title="Natural cubic spline interpolation",xaxis=attr(title="args"),yaxis=attr(title="values"))
+    layout = Layout(;title="Interpolacja naturalną funkcją sklejaną III stopnia",xaxis=attr(title="argumenty"),yaxis=attr(title="wartości"))
     
     if error == true
-        @printf("Błądy interpolacji funkcją sklejaną:\n")
+        @printf("Błędy interpolacji funkcją sklejaną:\n")
         testErrorFunction(f,args,s,NArray)
     end
 
@@ -183,13 +183,13 @@ function plotNewton(f,args,step,error = false, NArray = [2])
     func_values = map(f,_args)
     newt_values = map(newton,_args)
     
-    func = scatter(;x=_args, y=func_values, mode="lines", name = "function")
-    newt = scatter(;x=_args, y=newt_values, mode="lines", name = "interpolation polynomial")
+    func = scatter(;x=_args, y=func_values, mode="lines", name = "funkcja interpolowana")
+    newt = scatter(;x=_args, y=newt_values, mode="lines", name = "wielomian interpolacyjny")
     
-    layout = Layout(;title="Newton interpolation",xaxis=attr(title="args"),yaxis=attr(title="values"))
+    layout = Layout(;title="Interpolacja wielomianem",xaxis=attr(title="argumenty"),yaxis=attr(title="wartości"))
     
     if error == true
-        @printf("Błądy interpolacji wielomianem:\n")
+        @printf("Błędy interpolacji wielomianem:\n")
         testErrorFunction(f,args,newton,NArray)
     end
 
@@ -215,17 +215,17 @@ function plotNewtonSpline(f,args,step,error = false, NArray = [2] )
     spline_values = map(s,plot_args)
     newton_values = map(newton,plot_args)
     
-    func = scatter(;x=plot_args, y=func_values, mode="lines", name = "function")
-    spli = scatter(;x=plot_args, y=spline_values, mode="lines", name = "spline")
-    newt = scatter(;x=plot_args, y=newton_values, mode="lines", name = "newton")
+    func = scatter(;x=plot_args, y=func_values, mode="lines", name = "funkcja interpolowana")
+    spli = scatter(;x=plot_args, y=spline_values, mode="lines", name = "funkcja sklejana")
+    newt = scatter(;x=plot_args, y=newton_values, mode="lines", name = "wielomian interpolacyjny")
 
-    layout = Layout(;title="Natural cubic spline, and polynomial interpolation",xaxis=attr(title="args"),yaxis=attr(title="values"))
+    layout = Layout(;title="Interpolacja naturalną funkcją sklejaną III stopnia oraz wielomianem",xaxis=attr(title="args"),yaxis=attr(title="values"))
     
 
     if error == true
-        @printf("Błądy interpolacji wielomianem:\n")
+        @printf("Błędy interpolacji wielomianem:\n")
         testErrorFunction(f,args,newton,NArray)
-        @printf("Błądy interpolacji funkcją sklejaną:\n")
+        @printf("Błędy interpolacji funkcją sklejaną:\n")
         testErrorFunction(f,args,s,NArray)
     end
 
@@ -236,8 +236,9 @@ function testError(f,args,interpMethod,NArray)
     show_args = collect(args)
 
     interpFunction = interpMethod(f,args)
-    n = length(args) - 1
-    @printf("Interpolacja w N równoodległych węzłach:\n");
+    n = length(args) 
+    @printf("Błąd liczony w N równoodległych punktach\n")
+    @printf("Interpolacja w n węzłach:\n");
     @show show_args
     for N in NArray
         error = interpErrorFunction(f,args,interpFunction,N)
@@ -248,8 +249,9 @@ end
 function testErrorFunction(f,args,interpFunction,NArray)
     show_args = collect(args)
 
-    n = length(args) - 1
-    @printf("Interpolacja w N równoodległych węzłach:\n");
+    n = length(args) 
+    @printf("Błąd liczony w N równoodległych punktach\n")
+    @printf("Interpolacja w n węzłach:\n");
     @show show_args
     for N in NArray
         error = interpErrorFunction(f,args,interpFunction,N)

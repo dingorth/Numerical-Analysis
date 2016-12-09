@@ -10,6 +10,7 @@
 \usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{alltt}
 \usepackage{comment}
 \usepackage[section]{placeins}
 \newtheorem{defi}{Definicja}
@@ -25,23 +26,14 @@
 
 \section{Wstęp}
 
-"Interpolacja to metoda numeryczna polegająca na wyznaczaniu w danym przedziale tzw. funkcji interpolacyjnej, która przyjmuje w nim z góry zadane wartości, w ustalonych punktach nazywanych węzłami." \cite{wikipedia_pl}
-Najczęściej stosowana jest interpolacja wielomianami, ponieważ  mają one sporo przydatnych własności, co imlikuje istnienie wielu narzędzi matematycznych do ich analizy. Jednakże nie zawsze jest to dobra metoda.
-Zastosować wtedy można inny sposób interpolacji - interpolację funkcjami sklejanymi.
-Przedstawię obię metody, skupiając się jednak na interpolacjami funkcjami sklejanymi. Porównam ich błędy w stosunku do funkcji interpolowanej.
+Interpolacja to proces polegający na wyznaczaniu w danym przedziale tzw. funkcji interpolacyjnej, która przyjmuje w nim z góry zadane wartości, w ustalonych punktach nazywanych węzłami. \cite{wikipedia_pl}
+Najczęściej stosowana jest interpolacja wielomianami, ponieważ  mają one sporo przydatnych własności, co implikuje istnienie wielu narzędzi matematycznych do ich analizy. Jednakże nie zawsze jest to dobra metoda.
+Zastosować można wtedy inny sposób interpolacji - interpolację funkcjami sklejanymi.
 
-Wszelkie testy i obliczenia zostały wykonane w środowisku Jupyter Notebook przy użyciu języka programowania Julia w wersji 0.5.0.
-Znaleźć można je w dołączonym pliku program.ipynb.\\\\
-\noindent
-Zanim przystąpimy do obliczeń ustalmy najpierw funkcję błędu:
+Przedstawię obie metody, skupiając się jednak na interpolacji funkcjami sklejanymi. Porównam ich błędy w stosunku do funkcji interpolowanej.
 
-\begin{defi}
-	$E_N^{(n)} := \max_{x \in D_N}|f(x)-s(x)))|$ \\
-	\\
-	Gdzie s jest funkcją interpolacyjną w n+1 parami różnych węzłach z przedziału $[a,b]$, f funkcją interpolowaną a $D_N$ zbiorem parami różnych równoodległych punktów z przedziału $[a,b]$.
-\end{defi}
-
-
+Wszelkie testy i obliczenia zostały wykonane w środowisku Jupyter Notebook przy użyciu języka programowania \textbf{Julia} w wersji \textbf{0.5.0}.
+Znaleźć można je w dołączonym do sprawozdania pliku \textbf{program.ipynb}.\\\\
 
 \section{Interpolacja wielomianowa}
 Interpolacja wielomianowa polega na znalezieniu wielomianu $n$-tego stopnia, który w $n+1$ węzłach będzie miał te same wartości co funkcja interpolowana. Rozwiązaniem tego problemu jest interpolacja Lagrange'a. Rozważmy wielomiany interpolacyjne w postaci Newtona dla następujących funkcji:
@@ -59,6 +51,32 @@ Interpolacja wielomianowa polega na znalezieniu wielomianu $n$-tego stopnia, kt�
 	f(x) = x/(x^{2} + \frac{1}{4}), \textnormal{ } x \in [-\pi,\pi]
 \end{equation}
 
+Przed przystąpieniem do obliczeń ustalmy najpierw funkcję błędu:
+\begin{defi}\label{Error}
+	$E_N^{(n)} := \max_{x \in D_N}|f(x)-s(x)))|$ \\
+	\\
+	Gdzie s jest funkcją interpolacyjną w n+1 parami różnych węzłach z przedziału $[a,b]$, f funkcją interpolowaną a $D_N$ zbiorem parami różnych równoodległych punktów z przedziału $[a,b]$.
+\end{defi}
+
+\renewcommand{\arraystretch}{1.5}  % Zwiększamy wielkosć komórki (o 1.5 raza).
+%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+	\begin{tabular}{||c||c|c|c|c||} \hline
+		\multicolumn{5}{||c||}{Wartości funkcji błędu\eqref{Error} dla N = 200  } \\ \hline
+		Ilość węzłów* & $sin(x)$ & $e^x$ & $(x^{2}+1)^{-1}$ & $x/(x^{2} + \frac{1}{4})$ \\ \hline
+		5 &  1.004 &  1.0654 &  1.06504 & \\
+		\hline
+		20 &  3.707 &  3.007 &  3.73007 & \\
+		\hline
+		50 &  2.23 &  2.009 &  2.23099 & \\
+		\hline
+		100 &  2.23 &  2.009 &  2.23099 & \\
+		\hline
+	\end{tabular}
+	\text{* węzły równoodległe}
+\end{center}
+%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\arraystretch}{1}
 
 W przypadku funkcji \eqref{fun1} i \eqref{fun2} błąd wielomianu interpolacyjnego jest niewielki. Natomiast przy funkcjach \eqref{fun3} i \eqref{fun4} zaobserwować można tzw. efekt Runge'go\cite{runge}. Polega on na tym, że przy zwiększaniu ilości węzłów uzyskujemy coraz większy błąd na końcach przedziałów interpolacji. Rozwiązaniem tego problemu może być interpolacja funkcjami sklejanymi.
 
@@ -88,10 +106,10 @@ Rozważmy interpolacje naturalną funkcją sklejaną III stopnia gdzie $t_i$ bę
 \section{Interpolacja naturalną funkcją sklejaną III stopnia}
 
 \begin{defi}
-	Naturalna funkcja sklejana III S, stopnia s, interpolująca funkcję f w punktach $a = x_0 < x_i <...<x_n = b$ $\in [a,b]$ spełnia warunki:
+	Naturalna funkcja sklejana III stopnia S, interpolująca funkcję f w punktach $a = x_0 < x_i <...<x_n = b$ w przedziale $[a,b]$ spełnia warunki:
 	
 	\begin{itemize}
-		\item w każdym przedziale $[x_i,x_{i+1}]$ S jest wielomianem stopnia co najwyżej s.
+		\item w każdym przedziale $[x_i,x_{i+1}]$ S jest wielomianem stopnia co najwyżej 3.
 		\item Dla wszystkich $x_i$ $S(x_i) = f(x_i)$.
 	\end{itemize}
 	
@@ -111,24 +129,43 @@ Rozważmy interpolacje naturalną funkcją sklejaną III stopnia gdzie $t_i$ bę
 	
 Układ równań z powyższego twierdzenia w postaci macierzowej ma trójprzekątniową macierz z dominującą przekątną. Można go więc rozwiązać w czasie liniowym.
 
-\subsection{Algorytm rozwiązywania układu równań ze względu na $M_k$}
-\begin{verbatim}
-	algorytm
-\end{verbatim}
+\subsection{Algorytm rozwiązujący układ równań ze względu na $M_k$ w czasie linowym}
 
-Naturalna funkcja sklejana III stopnia interpolująca funkcję f w przedziale $[a,b]$ i punktach $a = x_0 < x_i <...<x_n = b$ dana jest wzorem:
+\begin{align}
+	&q_0 := u_0 := 0 \\
+	\notag
+	&\begin{rcases}
+		p_k := \lambda_k q_{k-1} + 2 \\ \notag
+		q_k := (\lambda_k - 1) / p_k \\ \notag
+		u_k := (d_k -\lambda_k u_{k-1}) / p_k
+	\end{rcases}
+	\text{$(k=1,2,...,n-1)$}
+\end{align}
+gdzie
+\begin{equation*}
+	d_k = 6 f[x_{k-1},x_k,x{k+1}] \textnormal{ } (k=1,2,...,n-1)
+\end{equation*}
+Wówczas
+\begin{align*}
+	&M_{n-1} = u_{n-1} \\ \notag
+	&M_k = u_k + q_k M_{k+1} \textnormal{ } (k =n-2,n-3,...,1 )
+\end{align*}
+\\
 
-\begin{equation}
-	S(x) = h_{k}^{-1}[]
-\end{equation}
+\noindent Naturalna funkcja sklejana III stopnia interpolująca funkcję f w przedziale $[a,b]$ i punktach $a = x_0 < x_i <...<x_n = b$ dana jest wzorem:
 
-
+\begin{align}
+	S(x) = h_{k}^{-1}&[\frac{1}{6} M_{k-1}(x_k - x)^3  
+					 +\frac{1}{6} M_k (x - x_{k-1})^3 \\
+					 \notag
+					 &+(f(x_{k-1}) - \frac{1}{6} M_{k-1} h_{k}^2) (x_k -x ) \\
+					 \notag
+					 &+(f(x_{k}) - \frac{1}{6} M_{k} h_{k}^2) (x_{k-1} -x )]
+\end{align}
 
 
 \section{Testy}
-Wykresiki i liczenie błędów.
-
-Wybór punktów interpolacyjnych.
+Po zaimplementowaniu algorytmu znajdującego naturalną funkcję sklejaną III stopnia dla danej funkcji interpolowanej wykonałem testy dla funkcji\eqref{fun1} \eqref{fun2} \eqref{fun3} \eqref{fun4}.
 	
 	
 \section{Wnioski}
