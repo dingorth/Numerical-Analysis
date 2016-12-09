@@ -186,10 +186,10 @@ function plotNewton(f,args,step,error = false, NArray = [2])
     func = scatter(;x=_args, y=func_values, mode="lines", name = "funkcja interpolowana")
     newt = scatter(;x=_args, y=newt_values, mode="lines", name = "wielomian interpolacyjny")
     
-    layout = Layout(;title="Interpolacja wielomianem",xaxis=attr(title="argumenty"),yaxis=attr(title="wartości"))
+    layout = Layout(;title="Interpolacja wielomianowa",xaxis=attr(title="argumenty"),yaxis=attr(title="wartości"))
     
     if error == true
-        @printf("Błędy interpolacji wielomianem:\n")
+        @printf("Błędy interpolacji wielomianowej:\n")
         testErrorFunction(f,args,newton,NArray)
     end
 
@@ -219,11 +219,11 @@ function plotNewtonSpline(f,args,step,error = false, NArray = [2] )
     spli = scatter(;x=plot_args, y=spline_values, mode="lines", name = "funkcja sklejana")
     newt = scatter(;x=plot_args, y=newton_values, mode="lines", name = "wielomian interpolacyjny")
 
-    layout = Layout(;title="Interpolacja naturalną funkcją sklejaną III stopnia oraz wielomianem",xaxis=attr(title="args"),yaxis=attr(title="values"))
+    layout = Layout(;title="Interpolacja naturalną funkcją sklejaną III stopnia oraz interpolacja wielomianowa",xaxis=attr(title="args"),yaxis=attr(title="values"))
     
 
     if error == true
-        @printf("Błędy interpolacji wielomianem:\n")
+        @printf("Błędy interpolacji wielomianowej:\n")
         testErrorFunction(f,args,newton,NArray)
         @printf("Błędy interpolacji funkcją sklejaną:\n")
         testErrorFunction(f,args,s,NArray)

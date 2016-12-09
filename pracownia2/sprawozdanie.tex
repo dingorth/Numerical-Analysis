@@ -13,6 +13,7 @@
 \usepackage{alltt}
 \usepackage{comment}
 \usepackage[section]{placeins}
+\graphicspath {{plots/}}
 \newtheorem{defi}{Definicja}
 \newtheorem{twr}{Twierdzenie}
 
@@ -27,7 +28,7 @@
 \section{Wstęp}
 
 Interpolacja to proces polegający na wyznaczaniu w danym przedziale tzw. funkcji interpolacyjnej, która przyjmuje w nim z góry zadane wartości, w ustalonych punktach nazywanych węzłami. \cite{wikipedia_pl}
-Najczęściej stosowana jest interpolacja wielomianami, ponieważ  mają one sporo przydatnych własności, co implikuje istnienie wielu narzędzi matematycznych do ich analizy. Jednakże nie zawsze jest to dobra metoda.
+Często stosowana jest interpolacja wielomianowa, ponieważ  funkcje te mają sporo przydatnych własności, co implikuje istnienie wielu narzędzi matematycznych do ich analizy. Jednakże nie zawsze jest to dobra metoda.
 Zastosować można wtedy inny sposób interpolacji - interpolację funkcjami sklejanymi.
 
 Przedstawię obie metody, skupiając się jednak na interpolacji funkcjami sklejanymi. Porównam ich błędy w stosunku do funkcji interpolowanej.
@@ -36,7 +37,7 @@ Wszelkie testy i obliczenia zostały wykonane w środowisku Jupyter Notebook prz
 Znaleźć można je w dołączonym do sprawozdania pliku \textbf{program.ipynb}.\\\\
 
 \section{Interpolacja wielomianowa}
-Interpolacja wielomianowa polega na znalezieniu wielomianu $n$-tego stopnia, który w $n+1$ węzłach będzie miał te same wartości co funkcja interpolowana. Rozwiązaniem tego problemu jest interpolacja Lagrange'a. Rozważmy wielomiany interpolacyjne w postaci Newtona dla następujących funkcji:
+Interpolacja wielomianowa polega na znalezieniu wielomianu $n$-tego stopnia, który w $n+1$ węzłach będzie miał te same wartości co funkcja interpolowana. Rozważmy wielomiany interpolacyjne w postaci Newtona dla następujących funkcji:
 
 \begin{equation}\label{fun1}
 	f(x) = sin(x), \textnormal{ } x \in [0,\pi]
@@ -58,28 +59,47 @@ Przed przystąpieniem do obliczeń ustalmy najpierw funkcję błędu:
 	Gdzie s jest funkcją interpolacyjną w n+1 parami różnych węzłach z przedziału $[a,b]$, f funkcją interpolowaną a $D_N$ zbiorem parami różnych równoodległych punktów z przedziału $[a,b]$.
 \end{defi}
 
-\renewcommand{\arraystretch}{1.5}  % Zwiększamy wielkosć komórki (o 1.5 raza).
-%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\arraystretch}{1.5}  
 \begin{center}
 	\begin{tabular}{||c||c|c|c|c||} \hline
-		\multicolumn{5}{||c||}{Wartości funkcji błędu\eqref{Error} dla N = 200  } \\ \hline
-		Ilość węzłów* & $sin(x)$ & $e^x$ & $(x^{2}+1)^{-1}$ & $x/(x^{2} + \frac{1}{4})$ \\ \hline
-		5 &  1.004 &  1.0654 &  1.06504 & \\
-		\hline
-		20 &  3.707 &  3.007 &  3.73007 & \\
-		\hline
-		50 &  2.23 &  2.009 &  2.23099 & \\
-		\hline
-		100 &  2.23 &  2.009 &  2.23099 & \\
-		\hline
+		\multicolumn{5}{||c||}{Tabela błędów dla N = 1000} \\ \hline
+		Węzły 	& \multicolumn{4}{|c||}{Funkcje} \\ \cline{2-5}
+				& $\sin x$ & $e^x$ & $(x^{2}+1)^{-1}$ & $x/(x^{2} + \frac{1}{4})$ \\ \hline					
+		3 		& 5.59122e-02 &  1.80850e-03 &  2.90187e-07 & dupa\\\hline
+		5 		& 5.60067e-02 &  1.80973e-03 &  2.99754e-07 & dupa\\\hline
+		10  	& 5.60096e-02 &  1.81196e-03 &  3.00628e-07 & dupa\\\hline
+		50  	& 5.60096e-02 &  1.81210e-03 &  3.00631e-07 & dupa\\\hline
+		100  	& 5.60096e-02 &  1.81210e-03 &  3.00631e-07 & dupa\\\hline
 	\end{tabular}
-	\text{* węzły równoodległe}
+
 \end{center}
-%%%%%%%%%%%%%%%%%%%%
 \renewcommand{\arraystretch}{1}
+
+\begin{figure}[ht]
+	\begin{center}
+		\includegraphics[width=13cm]{lagrange_sin}
+	\end{center}
+	\caption{Interpolacja funkcji \eqref{fun1} w 3 węzłach}
+	\label{fig:rysunek1}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}[ht]{0.5\textwidth}
+		\includegraphics[width=\textwidth]{lagrange_c}
+		\caption{Interpolacja funkcji \eqref{fun3}}
+		\label{fig:2}
+	\end{subfigure}%
+	\begin{subfigure}[ht]{0.5\textwidth}
+		\includegraphics[width=\textwidth]{lagrange_d}
+		\caption{Interpolacja funkcji \eqref{fun4}}
+		\label{fig:3}
+	\end{subfigure}
+\end{figure}
 
 W przypadku funkcji \eqref{fun1} i \eqref{fun2} błąd wielomianu interpolacyjnego jest niewielki. Natomiast przy funkcjach \eqref{fun3} i \eqref{fun4} zaobserwować można tzw. efekt Runge'go\cite{runge}. Polega on na tym, że przy zwiększaniu ilości węzłów uzyskujemy coraz większy błąd na końcach przedziałów interpolacji. Rozwiązaniem tego problemu może być interpolacja funkcjami sklejanymi.
 
+Obliczenia dla innych funkcji i kombinacji punktów interpolacji oraz $N$ można znaleźć w pliku \textbf{program.ipynb}.
 
 \section{Funkcje sklejane}
 
@@ -170,6 +190,7 @@ Po zaimplementowaniu algorytmu znajdującego naturalną funkcję sklejaną III s
 	
 \section{Wnioski}
 Jeśli zwykła interpolacja bardzo odstaje w niektórych miejscach to lepiej interpolować splinem.
+Spliney dobrze odwzorowują kształt a niekoniecznie dokładne wartości funkcji.
 
 Czy punkty równoodległe?
 
