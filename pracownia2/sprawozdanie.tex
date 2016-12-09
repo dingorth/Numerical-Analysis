@@ -24,12 +24,16 @@
 \maketitle
 
 \section{Wstęp}
+
 "Interpolacja to metoda numeryczna polegająca na wyznaczaniu w danym przedziale tzw. funkcji interpolacyjnej, która przyjmuje w nim z góry zadane wartości, w ustalonych punktach nazywanych węzłami." \cite{wikipedia_pl}
 Najczęściej stosowana jest interpolacja wielomianami, ponieważ  mają one sporo przydatnych własności, co imlikuje istnienie wielu narzędzi matematycznych do ich analizy. Jednakże nie zawsze jest to dobra metoda.
-Wtedy zastosować można inny sposób interpolacji - interpolację funkcjami sklejanymi.
+Zastosować wtedy można inny sposób interpolacji - interpolację funkcjami sklejanymi.
 Przedstawię obię metody, skupiając się jednak na interpolacjami funkcjami sklejanymi. Porównam ich błędy w stosunku do funkcji interpolowanej.
 
-Zanim przystąpimy do obliczeń ustalmy funkcję błędu:
+Wszelkie testy i obliczenia zostały wykonane w środowisku Jupyter Notebook przy użyciu języka programowania Julia w wersji 0.5.0.
+Znaleźć można je w dołączonym pliku program.ipynb.\\\\
+\noindent
+Zanim przystąpimy do obliczeń ustalmy najpierw funkcję błędu:
 
 \begin{defi}
 	$E_N^{(n)} := \max_{x \in D_N}|f(x)-s(x)))|$ \\
@@ -37,22 +41,89 @@ Zanim przystąpimy do obliczeń ustalmy funkcję błędu:
 	Gdzie s jest funkcją interpolacyjną w n+1 parami różnych węzłach z przedziału $[a,b]$, f funkcją interpolowaną a $D_N$ zbiorem parami różnych równoodległych punktów z przedziału $[a,b]$.
 \end{defi}
 
-\section{Interpolacja wielomianowa}
-Zinterpolujmy funkcję w n+1 punktach wielomianem n-tego stopnia.
-Zastosujemy algorytm znajdjący wielomian interpolacyjny w postaci Newtona.
 
-Funkcja Runge'go
-Całkiem fajnie działa. Psuje się na końcach przedziałów. Czasem im więcej punktów tym większy błąd - większa norma. To bardzo źle.
+
+\section{Interpolacja wielomianowa}
+Interpolacja wielomianowa polega na znalezieniu wielomianu $n$-tego stopnia, który w $n+1$ węzłach będzie miał te same wartości co funkcja interpolowana. Rozwiązaniem tego problemu jest interpolacja Lagrange'a. Rozważmy wielomiany interpolacyjne w postaci Newtona dla następujących funkcji:
+
+\begin{equation}\label{fun1}
+	f(x) = sin(x), \textnormal{ } x \in [0,\pi]
+\end{equation}
+\begin{equation}\label{fun2}
+	f(x) = e^x, \textnormal{ } x \in [0,4]
+\end{equation}
+\begin{equation}\label{fun3}
+	f(x) = (x^{2}+1)^{-1}, \textnormal{ } x \in [-5,5]
+\end{equation}
+\begin{equation}\label{fun4}
+	f(x) = x/(x^{2} + \frac{1}{4}), \textnormal{ } x \in [-\pi,\pi]
+\end{equation}
+
+
+W przypadku funkcji \eqref{fun1} i \eqref{fun2} błąd wielomianu interpolacyjnego jest niewielki. Natomiast przy funkcjach \eqref{fun3} i \eqref{fun4} zaobserwować można tzw. efekt Runge'go\cite{runge}. Polega on na tym, że przy zwiększaniu ilości węzłów uzyskujemy coraz większy błąd na końcach przedziałów interpolacji. Rozwiązaniem tego problemu może być interpolacja funkcjami sklejanymi.
+
 
 \section{Funkcje sklejane}
 
-Cała ta teoria. Stopnie funkcji. Okresowa, naturalna.
-Zajmiemy się naturalną.
+
+\begin{defi}
+	\textbf{Funkcją sklejaną} S(x) stopnia s, określoną na przedziale $[a,b]$ nazywamy dowolną funkcję spełniającą warunki:
+	
+	\begin{itemize}
+		\item w każdym przedziale $[t_i,t_{i+1}]$, gdzie $a = t_0 < t_i <...<t_n = b$, S jest wielomianem stopnia co najwyżej s.
+		\item S oraz jej pochodne rzędu 1,2,...,s-1 są ciągłe na całym przedziale $[a,b]$.
+	\end{itemize}
+\end{defi}
+
+\noindent Aby ujednoznacznić istnienie takiej funkcji n-tego stopnia wyznaczanej przez $n+1$ punktów $t_i$ definiuje się dodatkowe warunki:
+
+\begin{defi}
+	Funkcję sklejaną S(x) stopnia s, określoną na przedziale $[a,b]$
+	nazywamy \textbf{naturalną} gdy:
+	$S^{(s-1)}(a) = S^{(s-1)}(b) = 0$.
+\end{defi}
+
+Rozważmy interpolacje naturalną funkcją sklejaną III stopnia gdzie $t_i$ będą węzłami interpolacji.
 
 \section{Interpolacja naturalną funkcją sklejaną III stopnia}
-Macierzowy układ równań. Trójprzekątniowa macierz z dominującą przekątną.
-Momenty - drugie pochodne.
-Algorytm rozwiązujący w czasie liniowym.
+
+\begin{defi}
+	Naturalna funkcja sklejana III S, stopnia s, interpolująca funkcję f w punktach $a = x_0 < x_i <...<x_n = b$ $\in [a,b]$ spełnia warunki:
+	
+	\begin{itemize}
+		\item w każdym przedziale $[x_i,x_{i+1}]$ S jest wielomianem stopnia co najwyżej s.
+		\item Dla wszystkich $x_i$ $S(x_i) = f(x_i)$.
+	\end{itemize}
+	
+\end{defi}
+
+\noindent Wprowadźmy oznaczenie:
+
+\begin{defi}
+	$M_k := S''(x_k)$
+\end{defi}
+
+\begin{twr}
+	Wielkośći $M_k$ spełniają układ równań liniowych:\\
+	$\lambda_k M_{k-1} + 2M_k + (1-\lambda_k) M_{k+1} = 6f[x_{k-1},x_k,x_{k+1}]$ \hfill $(k=0,1,...,n)$\\
+	gdzie: $\lambda_k := h_k / ( h_k + h_{k+1})$, oraz $h_k = x_k - x_{k-1}$
+\end{twr}
+	
+Układ równań z powyższego twierdzenia w postaci macierzowej ma trójprzekątniową macierz z dominującą przekątną. Można go więc rozwiązać w czasie liniowym.
+
+\subsection{Algorytm rozwiązywania układu równań ze względu na $M_k$}
+\begin{verbatim}
+	algorytm
+\end{verbatim}
+
+Naturalna funkcja sklejana III stopnia interpolująca funkcję f w przedziale $[a,b]$ i punktach $a = x_0 < x_i <...<x_n = b$ dana jest wzorem:
+
+\begin{equation}
+	S(x) = h_{k}^{-1}[]
+\end{equation}
+
+
+
 
 \section{Testy}
 Wykresiki i liczenie błędów.
@@ -76,6 +147,12 @@ Czy punkty równoodległe?
 	\bibitem{wolfram_mathworld} Weisstein, Eric W. "Cubic Spline." From MathWorld--A Wolfram Web Resource. \url{http://mathworld.wolfram.com/CubicSpline.html}
 	
 	\bibitem{wiki} \url{https://en.wikipedia.org/wiki/Spline_interpolation}
+	
+	\bibitem{wikipedia_pl}
+	\url{https://pl.wikipedia.org/wiki/Interpolacja_(matematyka)}
+	
+	\bibitem{runge}
+	\url{https://en.wikipedia.org/wiki/Runge%27s_phenomenon}
 	 
 \end{thebibliography}
 
