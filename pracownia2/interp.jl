@@ -19,7 +19,7 @@ function difference_quotients(f,args)
     values = map(f,args)
     
 
-    for i in one:length(args)-1
+    for i in 1:1:length(args)-1
         for j in length(args):-1:1+i
             values[j] = ( values[j] - values[j-1] ) / ( args[j] - args[j-i] )
         end
@@ -297,3 +297,4 @@ function showNodes(nodes)
     end
     @printf("%.2e ]\n",nodes[end])
 end
+
