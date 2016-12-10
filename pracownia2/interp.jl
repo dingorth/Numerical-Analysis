@@ -2,12 +2,24 @@
 # 281141
 # Zadanie P2.9
 
+bhalf = big"0.5"
+bzero = big"0.0"
+bone = big"1.0"
+btwo = big"2.0"
+bthree = big"3.0"
+bfour = big"4.0"
+bfive = big"5.0"
+bsix = big"6.0"
+beight = big"8"
+bten = big"10.0"
+
 
 # Funkcja wylicza ilorazy różnicowe.
 function difference_quotients(f,args)
     values = map(f,args)
     
-    for i in 1:length(args)-1
+
+    for i in one:length(args)-1
         for j in length(args):-1:1+i
             values[j] = ( values[j] - values[j-1] ) / ( args[j] - args[j-i] )
         end
@@ -20,7 +32,7 @@ end
 # Funkcje pomocnicze dla funkcji Ms
 λ(k,args) = h(k,args)/(h(k+1,args) + h(k,args))
 h(k,args) = args[k] - args[k-1]
-d(k,f,args) = 6*difference_quotients(f,[args[k-1],args[k],args[k+1]])[3]
+d(k,f,args) = big"6"*difference_quotients(f,[args[k-1],args[k],args[k+1]])[3]
 
 
 # Funkcja wyliczająca drugie pochodne naturanej funkcji sklejanej 
@@ -32,18 +44,18 @@ function Ms(f,args)
     q = Array{Any}(n-1)
     u = Array{Any}(n-1)
     
-    q[1] = 0
-    u[1] = 0
+    q[1] = bzero
+    u[1] = bzero
     
     for k in 1:1:n-2
-        p = λ(k+1,args)*q[k] + 2
-        q[k+1] = ( λ(k+1,args)-1 ) / p
+        p = λ(k+1,args)*q[k] + btwo
+        q[k+1] = ( λ(k+1,args)-bone ) / p
         u[k+1] = ( d(k+1,f,args) - λ(k+1,args)*u[k]) / p
     end
     
     M = Array{Any}(n)
-    M[1] = 0
-    M[n] = 0
+    M[1] = bzero
+    M[n] = bzero
     M[n-1] = u[n-1]
     
     for k in n-3:-1:1
@@ -63,9 +75,9 @@ function splineValue(x,f,M,args)
         k += 1
     end
     
-    return ( (M[k]*(args[k+1]-x)^3)/6 + (M[k+1]*(x-args[k])^3)/6 + 
-                (f(args[k])-(M[k]*(h(k+1,args)^2))/6)*(args[k+1] -x) +   
-                (f(args[k+1])-(M[k+1]*(h(k+1,args)^2))/6)*(x-args[k]) ) / 
+    return ( (M[k]*(args[k+1]-x)^bthree)/bsix + (M[k+1]*(x-args[k])^bthree)/bsix + 
+                (f(args[k])-(M[k]*(h(k+1,args)^btwo))/bsix)*(args[k+1] -x) +   
+                (f(args[k+1])-(M[k+1]*(h(k+1,args)^btwo))/bsix)*(x-args[k]) ) / 
                 h(k+1,args)   
 end
 
@@ -82,11 +94,11 @@ function interpError(f,args,method,N)
     a = args[1]
     b = args[end]
     
-    step = (b - a) / (N - 1)
+    step = (b - a) / (N - bone)
     
     range = a:step:b
     
-    max = 0
+    max = bzero
     for i in range
         diff = abs(f(i) - s(i))
         if( diff > max )
@@ -102,11 +114,11 @@ function interpErrorFunction(f,args,interpFunction,N)
     a = args[1]
     b = args[end]
     
-    step = (b - a) / (N - 1)
+    step = (b - a) / (N - bone)
     
     range = a:step:b
     
-    max = 0
+    max = bzero
     for i in range
         diff = abs(f(i) - interpFunction(i))
         if( diff > max )
@@ -127,7 +139,7 @@ function newtonInterp(f,args)
     newt[1] = _ -> b[1]
     
     p = Array{Function}(n)
-    p[1] = _ -> 1
+    p[1] = _ -> bone
     
     for i in 2:1:n
         p[i] = x -> p[i-1](x) * (x - args[i-1])
@@ -242,7 +254,7 @@ function testError(f,args,interpMethod,NArray)
     n = length(args) 
     @printf("Błąd liczony w N równoodległych punktach\n")
     @printf("Interpolacja w n węzłach:\n");
-    @show show_args
+    showNodes(show_args)
     for N in NArray
         error = interpErrorFunction(f,args,interpFunction,N)
         @printf("Błąd przy n = %d, N = %d:\t%.5e\n",n,N,error)
@@ -258,7 +270,7 @@ function testErrorFunction(f,args,interpFunction,NArray)
     n = length(args) 
     @printf("Błąd liczony w N równoodległych punktach\n")
     @printf("Interpolacja w n węzłach:\n");
-    @show show_args
+    showNodes(show_args)
     for N in NArray
         error = interpErrorFunction(f,args,interpFunction,N)
         @printf("Błąd przy n = %d, N = %d:\t%.5e\n",n,N,error)
@@ -271,9 +283,17 @@ end
 function chebyshevNodes(a,b,N)
     rtn = Array{Any}(N)
 
-    for k in N:-1:1
-         rtn[N+1-k] = 0.5*(a+b) + 0.5*(b-a)*cos(((2*k-1)/(2*N))*pi)
+    for k in N:-bone:bone
+         rtn[convert(Int,N+bone-k)] = bhalf*(a+b) + bhalf*(b-a)*cos(((btwo*k-bone)/(btwo*N))*big(pi))
     end
 
     return rtn
+end
+
+function showNodes(nodes)
+    @printf("[ ")
+    for i in 1:1:length(nodes)-1
+        @printf("%.2e, ",nodes[i])
+    end
+    @printf("%.2e ]\n",nodes[end])
 end

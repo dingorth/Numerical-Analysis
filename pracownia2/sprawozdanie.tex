@@ -33,7 +33,7 @@ Zastosować można wtedy inny sposób interpolacji - interpolację funkcjami skl
 
 Przedstawię obie metody, skupiając się jednak na interpolacji funkcjami sklejanymi. Porównam ich błędy w stosunku do funkcji interpolowanej.
 
-Wszelkie testy i obliczenia zostały wykonane w środowisku Jupyter Notebook przy użyciu języka programowania \textbf{Julia} w wersji \textbf{0.5.0}, w arytmetyce \textbf{Float64}.
+Wszelkie testy i obliczenia zostały wykonane w środowisku Jupyter Notebook przy użyciu języka programowania \textbf{Julia} w wersji \textbf{0.5.0}, w arytmetyce \textbf{BigFloat} z prezycją 1000.
 Znaleźć można je w dołączonym do sprawozdania pliku \textbf{program.ipynb}.\\\\
 
 \section{Interpolacja wielomianowa}
@@ -68,22 +68,22 @@ Przed przystąpieniem do obliczeń ustalmy najpierw funkcję błędu:
 		3 		& 5.60096e-02 &  6.32501e+00 &  6.46229e-01 & 9.51746e-01 \\ \hline
 		5 		& 1.81210e-03 &  3.38690e-01 &  4.38350e-01 & 7.95510e-01 \\ \hline
 		10  	& 3.00631e-07 &  3.34978e-05 &  3.00285e-01 & 3.76380e+00 \\ \hline
-		20  	& 2.13510e-14 &  1.20082e-12 &  8.57536e+00 & 2.00083e+02 \\ \hline
-		50  	& 2.01285e-05 &  7.62863e-05 &  6.60565e+05 & 8.65842e+07 \\ \hline
+		20  	& 1.10663e-18 &  1.19494e-15 &  8.57536e+00 & 2.00083e+02 \\ \hline
+		50  	& 3.47335e-63 &  4.80438e-57 &  6.60565e+05 & 8.65842e+07 \\ \hline
 	\end{tabular}
 \end{center}
 \renewcommand{\arraystretch}{1}
 
-W przypadku funkcji \eqref{fun1} i funkcji \eqref{fun2} obserwujemy wzrost dokładności wraz ze wzrostem ilości węzłów. Oczywiście, ze względu na arytmetykę, w której wykonujemy obliczenia, przy dużej ilości węzłów obserwujemy efekt utraty cyfr znaczących.
+W przypadku funkcji \eqref{fun1} i funkcji \eqref{fun2} obserwujemy znaczący wzrost dokładności wraz ze wzrostem ilości węzłów. 
 
 Z kolei funkcje \eqref{fun3} i \eqref{fun4} nie interpolują się w sposób jakiego byśmy oczekiwali. Zwiększenie ilości węzłów nie powoduje zwiększenia dokładności. Wprost przeciwnie - zmniejsza ją. Efekt ten nazywa się efektem Runge'go. Polega on na tym, że dla pewnych funkcji błąd interpolacji na końach przedziału zwiększa się wraz ze wzrostem ilości węzłów.
-Zaradzić można temu stosująć inny sposób interpolacji, np. interpolację funkcjami sklejanymi.
+Zaradzić można temu interpolując funkcję w węzłach które są przeskalowanymi zerami odpowiedniego wielomianu Czebyszewa, albo zastosować inny sposób interpolacji - interpolację funkcjami sklejanymi.
 
 \begin{figure}[ht]
 	\begin{center}
 		\includegraphics[width=13cm]{lagrange_sin}
 	\end{center}
-	\caption{Interpolacja funkcji \eqref{fun1} w 3 węzłach}
+	\caption{Interpolacja funkcji \eqref{fun1} w 3 równoodległych węzłach}
 	\label{fig:rysunek1}
 \end{figure}
 
@@ -91,15 +91,50 @@ Zaradzić można temu stosująć inny sposób interpolacji, np. interpolację fu
 	\centering
 	\begin{subfigure}[ht]{0.5\textwidth}
 		\includegraphics[width=\textwidth]{lagrange_c}
-		\caption{Interpolacja funkcji \eqref{fun3}}
+		\caption{Interpolacja funkcji \eqref{fun3} w 11 równoodległych węzłach}
 		\label{fig:2}
 	\end{subfigure}%
 	\begin{subfigure}[ht]{0.5\textwidth}
 		\includegraphics[width=\textwidth]{lagrange_d}
-		\caption{Interpolacja funkcji \eqref{fun4}}
+		\caption{Interpolacja funkcji \eqref{fun4} w 10 równoodległych węzłach}
 		\label{fig:3}
 	\end{subfigure}
 \end{figure}
+
+
+
+
+
+\renewcommand{\arraystretch}{1.5}  
+\begin{center}
+	\begin{tabular}{||c||c|c|c|c||} \hline
+		\multicolumn{5}{||c||}{Tabela błędów dla N = 1000} \\ \hline
+		Węzły Czebyszewa 	& \multicolumn{4}{|c||}{Funkcje} \\ \cline{2-5}
+		& $\sin x$ & $e^x$ & $(x^{2}+1)^{-1}$ & $x/(x^{2} + \frac{1}{4})$ \\ \hline					
+		3 		& 3.25042e-02 &  3.74479e+00 &  6.00596e-01 & 9.36666e-01 \\ \hline
+		5 		& 9.78100e-04 &  1.85380e-01 &  4.02016e-01 & 8.29971e-01 \\ \hline
+		10  	& 4.69702e-08 &  5.27884e-06 &  2.69159e-01 & 3.25376e-01 \\ \hline
+		20  	& 6.38319e-21 &  6.96882e-18 &  3.75819e-02 & 8.38636e-02 \\ \hline
+		50  	& 3.69287e-70 &  5.13405e-64 &  9.68221e-05 & 7.14083e-04 \\ \hline
+	\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}[ht]{0.5\textwidth}
+		\includegraphics[width=\textwidth]{chebyshev_lagrange_c}
+		\caption{Interpolacja funkcji \eqref{fun3} w 11 węzłach Czebyszewa}
+		\label{fig:2}
+	\end{subfigure}%
+	\begin{subfigure}[ht]{0.5\textwidth}
+		\includegraphics[width=\textwidth]{chebyshev_lagrange_d}
+		\caption{Interpolacja funkcji \eqref{fun4} w 10 węzłach Czebyszewa}
+		\label{fig:3}
+	\end{subfigure}
+\end{figure}
+
+
 
 Więcej obliczeń można znaleźć w pliku \textbf{program.ipynb}.
 
@@ -200,6 +235,21 @@ Po zaimplementowaniu algorytmu znajdującego naturalną funkcję sklejaną III s
 		10  	& 3.98466e-05 &  5.17255e-01 &  1.42857e-01 & 1.27153e-01 \\ \hline
 		20  	& 1.95842e-06 &  1.18143e-01 &  1.23295e-02 & 5.81372e-03 \\ \hline
 		50  	& 4.39481e-08 &  1.78329e-02 &  1.47830e-04 & 6.99450e-04 \\ \hline
+	\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+
+\renewcommand{\arraystretch}{1.5}  
+\begin{center}
+	\begin{tabular}{||c||c|c|c|c||} \hline
+		\multicolumn{5}{||c||}{Tabela błędów dla N = 1000} \\ \hline
+		Węzły Czebyszewa 	& \multicolumn{4}{|c||}{Funkcje} \\ \cline{2-5}
+		& $\sin x$ & $e^x$ & $(x^{2}+1)^{-1}$ & $x/(x^{2} + \frac{1}{4})$ \\ \hline					
+		3 		& 2.67947e-02 &  4.78534e+00 &  5.52584e-01 & 9.51746e-01 \\ \hline
+		5 		& 1.74205e-03 &  1.30820e+00 &  2.79309e-01 & 7.78300e-01 \\ \hline
+		10  	& 1.74219e-04 &  1.06546e-01 &  2.84800e-01 & 2.11489e-01 \\ \hline
+		20  	& 9.92148e-06 &  7.03993e-03 &  5.31571e-02 & 3.32994e-02 \\ \hline
+		50  	& 2.47689e-07 &  1.72779e-04 &  1.15453e-03 & 3.89304e-03 \\ \hline
 	\end{tabular}
 \end{center}
 \renewcommand{\arraystretch}{1}
