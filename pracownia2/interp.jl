@@ -259,3 +259,13 @@ function testErrorFunction(f,args,interpFunction,NArray)
     end 
     @printf("\n")
 end
+
+function chebyshevNodes(a,b,N)
+    rtn = []
+
+    for k in 1:1:N
+         push!(rtn, 0.5*(a+b) + 0.5*(b-a)*cos(((2*k-1)/(2*N))*pi) )
+    end
+
+    return sort(rtn)
+end
