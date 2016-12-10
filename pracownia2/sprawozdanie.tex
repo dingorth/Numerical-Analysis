@@ -33,7 +33,7 @@ Zastosować można wtedy inny sposób interpolacji - interpolację funkcjami skl
 
 Przedstawię obie metody, skupiając się jednak na interpolacji funkcjami sklejanymi. Porównam ich błędy w stosunku do funkcji interpolowanej.
 
-Wszelkie testy i obliczenia zostały wykonane w środowisku Jupyter Notebook przy użyciu języka programowania \textbf{Julia} w wersji \textbf{0.5.0}.
+Wszelkie testy i obliczenia zostały wykonane w środowisku Jupyter Notebook przy użyciu języka programowania \textbf{Julia} w wersji \textbf{0.5.0}, w arytmetyce \textbf{Float64}.
 Znaleźć można je w dołączonym do sprawozdania pliku \textbf{program.ipynb}.\\\\
 
 \section{Interpolacja wielomianowa}
@@ -63,17 +63,21 @@ Przed przystąpieniem do obliczeń ustalmy najpierw funkcję błędu:
 \begin{center}
 	\begin{tabular}{||c||c|c|c|c||} \hline
 		\multicolumn{5}{||c||}{Tabela błędów dla N = 1000} \\ \hline
-		Węzły 	& \multicolumn{4}{|c||}{Funkcje} \\ \cline{2-5}
+		Węzły równoodległe 	& \multicolumn{4}{|c||}{Funkcje} \\ \cline{2-5}
 				& $\sin x$ & $e^x$ & $(x^{2}+1)^{-1}$ & $x/(x^{2} + \frac{1}{4})$ \\ \hline					
-		3 		& 5.59122e-02 &  1.80850e-03 &  2.90187e-07 & dupa\\\hline
-		5 		& 5.60067e-02 &  1.80973e-03 &  2.99754e-07 & dupa\\\hline
-		10  	& 5.60096e-02 &  1.81196e-03 &  3.00628e-07 & dupa\\\hline
-		50  	& 5.60096e-02 &  1.81210e-03 &  3.00631e-07 & dupa\\\hline
-		100  	& 5.60096e-02 &  1.81210e-03 &  3.00631e-07 & dupa\\\hline
+		3 		& 5.60096e-02 &  6.32501e+00 &  6.46229e-01 & 9.51746e-01 \\ \hline
+		5 		& 1.81210e-03 &  3.38690e-01 &  4.38350e-01 & 7.95510e-01 \\ \hline
+		10  	& 3.00631e-07 &  3.34978e-05 &  3.00285e-01 & 3.76380e+00 \\ \hline
+		20  	& 2.13510e-14 &  1.20082e-12 &  8.57536e+00 & 2.00083e+02 \\ \hline
+		50  	& 2.01285e-05 &  7.62863e-05 &  6.60565e+05 & 8.65842e+07 \\ \hline
 	\end{tabular}
-
 \end{center}
 \renewcommand{\arraystretch}{1}
+
+W przypadku funkcji \eqref{fun1} i funkcji \eqref{fun2} obserwujemy wzrost dokładności wraz ze wzrostem ilości węzłów. Oczywiście, ze względu na arytmetykę, w której wykonujemy obliczenia, przy dużej ilości węzłów obserwujemy efekt utraty cyfr znaczących.
+
+Z kolei funkcje \eqref{fun3} i \eqref{fun4} nie interpolują się w sposób jakiego byśmy oczekiwali. Zwiększenie ilości węzłów nie powoduje zwiększenia dokładności. Wprost przeciwnie - zmniejsza ją. Efekt ten nazywa się efektem Runge'go. Polega on na tym, że dla pewnych funkcji błąd interpolacji na końach przedziału zwiększa się wraz ze wzrostem ilości węzłów.
+Zaradzić można temu stosująć inny sposób interpolacji, np. interpolację funkcjami sklejanymi.
 
 \begin{figure}[ht]
 	\begin{center}
@@ -97,9 +101,7 @@ Przed przystąpieniem do obliczeń ustalmy najpierw funkcję błędu:
 	\end{subfigure}
 \end{figure}
 
-W przypadku funkcji \eqref{fun1} i \eqref{fun2} błąd wielomianu interpolacyjnego jest niewielki. Natomiast przy funkcjach \eqref{fun3} i \eqref{fun4} zaobserwować można tzw. efekt Runge'go\cite{runge}. Polega on na tym, że przy zwiększaniu ilości węzłów uzyskujemy coraz większy błąd na końcach przedziałów interpolacji. Rozwiązaniem tego problemu może być interpolacja funkcjami sklejanymi.
-
-Obliczenia dla innych funkcji i kombinacji punktów interpolacji oraz $N$ można znaleźć w pliku \textbf{program.ipynb}.
+Więcej obliczeń można znaleźć w pliku \textbf{program.ipynb}.
 
 \section{Funkcje sklejane}
 
@@ -186,13 +188,47 @@ Wówczas
 
 \section{Testy}
 Po zaimplementowaniu algorytmu znajdującego naturalną funkcję sklejaną III stopnia dla danej funkcji interpolowanej wykonałem testy dla funkcji\eqref{fun1} \eqref{fun2} \eqref{fun3} \eqref{fun4}.
+
+\renewcommand{\arraystretch}{1.5}  
+\begin{center}
+	\begin{tabular}{||c||c|c|c|c||} \hline
+		\multicolumn{5}{||c||}{Tabela błędów dla N = 1000} \\ \hline
+		Węzły równoodległe 	& \multicolumn{4}{|c||}{Funkcje} \\ \cline{2-5}
+		& $\sin x$ & $e^x$ & $(x^{2}+1)^{-1}$ & $x/(x^{2} + \frac{1}{4})$ \\ \hline					
+		3 		& 2.00170e-02 &  7.82994e+00 &  6.01194e-01 & 9.51746e-01 \\ \hline
+		5 		& 1.06607e-03 &  2.41584e+00 &  2.79309e-01 & 7.78300e-01 \\ \hline
+		10  	& 3.98466e-05 &  5.17255e-01 &  1.42857e-01 & 1.27153e-01 \\ \hline
+		20  	& 1.95842e-06 &  1.18143e-01 &  1.23295e-02 & 5.81372e-03 \\ \hline
+		50  	& 4.39481e-08 &  1.78329e-02 &  1.47830e-04 & 6.99450e-04 \\ \hline
+	\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+
+\begin{figure}[ht]
+	\begin{center}
+		\includegraphics[width=13cm]{spline_c}
+	\end{center}
+	\caption{Interpolacja funkcji \eqref{fun3} w 10 węzłach}
+	\label{fig:rysunek3}
+\end{figure}
+
+\begin{figure}[ht]
+	\begin{center}
+		\includegraphics[width=13cm]{spline_d}
+	\end{center}
+	\caption{Interpolacja funkcji \eqref{fun4} w 11 węzłach}
+	\label{fig:rysunek4}
+\end{figure}
+
+
+Wyeliminowaliśmy efekt Runge'go w dwóch ostatnich funkcjach, jednakże funkcje sklejane niezbyt dokładnie odwzorowują funkcję. Mimo wielokrotnego zwiększania ilości węzłów, błąd maleje niewiele. W przypadku dwóch pierwszych funkcji lepiej sprawdzała się interpolacja wielomianowa.
 	
 	
 \section{Wnioski}
-Jeśli zwykła interpolacja bardzo odstaje w niektórych miejscach to lepiej interpolować splinem.
-Spliney dobrze odwzorowują kształt a niekoniecznie dokładne wartości funkcji.
 
-Czy punkty równoodległe?
+W przypadku niektórych funkcji, interpolacja wielomianowa nie sprawdza się. Błąd interpolacji na końcach przedziałów rośnie wraz ze wzrostem ilości węzłów. Warto zastosować wtedy interpolacje funkcjami sklejanymi. Efekt Runge'go zostanie wtedy wyeliminowany. 
+
+Funkcje sklejane dobrze odwzorowują ogólny kształt funkcji, jednak ich dokładność wraz ze zwiększaniem ilości węzłów rośnie bardzo powoli. W szczególności dużo wolniej niż dla interpolacji wielomianowej gdy efekt Runge'go nie występuje. Zatem gdy dla danej funkcji błąd interpolacji nie rośnie na końcach przedziałów dobrze jest interpolować wielomianem, w przeciwnym wypadku funkcją sklejaną.
 
 
 \begin{thebibliography}{9}
