@@ -232,6 +232,9 @@ function plotNewtonSpline(f,args,step,error = false, NArray = [2] )
     plot([func, spli, newt],layout)
 end
 
+# Funkcja testująca błąd z zadania dla danej funkcji f, przedziału 
+# interpolacji args, metody interpolacji InterpMethod oraz
+# wartości N z tablicy NArray
 function testError(f,args,interpMethod,NArray)
     show_args = collect(args)
 
@@ -246,6 +249,9 @@ function testError(f,args,interpMethod,NArray)
     end
 end
 
+# Funkcja testująca błąd z zadania dla danej funkcji f, przedziału 
+# interpolacji args, funkcji interpolacyjnej interpFunction oraz
+# wartości N z tablicy NArray
 function testErrorFunction(f,args,interpFunction,NArray)
     show_args = collect(args)
 
@@ -260,12 +266,14 @@ function testErrorFunction(f,args,interpFunction,NArray)
     @printf("\n")
 end
 
+# Funkcja zwracające zera N-tego wielomianu Czebyszewa
+# przeskalowane do przedziału [a,b]
 function chebyshevNodes(a,b,N)
-    rtn = []
+    rtn = Array{Any}(N)
 
-    for k in 1:1:N
-         push!(rtn, 0.5*(a+b) + 0.5*(b-a)*cos(((2*k-1)/(2*N))*pi) )
+    for k in N:-1:1
+         rtn[N+1-k] = 0.5*(a+b) + 0.5*(b-a)*cos(((2*k-1)/(2*N))*pi)
     end
 
-    return sort(rtn)
+    return rtn
 end
