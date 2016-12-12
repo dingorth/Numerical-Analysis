@@ -112,3 +112,18 @@ function plotChebyshev()
 
     plot([che,run], layout)
 end
+
+
+function error7(f,approxFunction,N)
+
+    max = 0
+
+    for i in -1:2/N:1
+        tmp = abs(f(i) - approxFunction(i))
+        if  tmp > max
+            max = tmp
+        end
+    end
+
+    return max
+end
