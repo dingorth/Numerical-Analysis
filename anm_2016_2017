@@ -1,0 +1,32 @@
+1. Załóżmy, że |alfa_{j}| <= u dla j = 1,2,...,n oraz że nu < 10^{-k} dla pewnego k > 1.
+	Wykazać, że zachodzi równość:
+	[PI od j=1 do n](1+alfa_{j}) = 1 + dziwne_{n}
+
+	gdzie |dziwne_{n}| <= (1+10^{-k})nu, zaś u oznacza prezycję pewnej arytmetyki.
+2. Wyprowadź wzory na kolejne przybliżenia uzyskane w metodzie Newtona dla układu równań:
+	4x^2 - y^2 = 1
+	4xy - x = 1
+	
+	Wykonać dwa kroki tej metody dla przybliżenia początkowego x_0 = [0,1]^T
+3. Rozważmy zbiór n+2 parami różnych punktów x,x_0,x_1,...,x_n. Wykazać, że:
+	f[x_0,x_1,...,x_n,x] = ([sigma od k=0 do n] f[x,x_k] )/ ( [pi od j=0 i j!=k do n] (x_k - x_j) )
+4. Znaleźć wielomian w(x), możliwie najniższego stopnia spełniający następujące warunki:
+	x_0 = -1 y_0 = 2   y'_0 = 0   y''_0 = 2
+	x_1 = 0	 y_1 = 10  y'_1 = 23  
+	x_2 = 0	 y_2 = 416 y'_2 = 627 y''_2 = 2324
+
+Zapisać wielomian w(x) w postaci Newtona.
+5. Dla jakich stałych a,b,c,d wyrażenie [max dla -1<=x<=1] |x^4 + ax^3 + bx^2 + cx + d|
+	przyhmuje najmniejszą wartość? Jaka jest ta wartość? Uzasadnić odpowiedź.
+6. Niech A należy do R^{nxn}, u,v należą do R^n. Załóżmy, że macierz A jest odwracalna oraz że v^{T}A^{-1} != -1. Udowodnić zależność
+
+	(A + uv^{T})^{-1} = A^{-1} - ( A^{-1}uv^{T}A^{-1} ) / ( 1+ v^{T}A^{-1}u  ) 
+7. Opisz kwadratury Newtona-Cotesa i Gaussa
+	a) wzory, wyprowadzenie współczynników,
+	b) rząd
+	c) cechy charakterystyczne
+8. Niech A należy do 
+9. Metodą eliminacji z wyborem elementów główych ( pełnym lub częściowym ) rozwiąż układ równań
+	1  4 -1   x1     -3
+	2 -3  1   x2  =   8
+	3  2 -5   x3      4
